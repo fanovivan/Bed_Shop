@@ -626,4 +626,132 @@ main {
     .cart-summary__actions .btn {
         width: 100%;
     }
+
+    .nav {
+        flex-wrap: wrap;
+        justify-content: flex-end;
+    }
+}
+
+/* Auth */
+.nav__user {
+    display: flex;
+    align-items: center;
+    padding: 8px 12px;
+    font-weight: 600;
+    color: var(--color-primary);
+    font-size: 0.9rem;
+}
+
+.nav__logout-form {
+    display: inline;
+    margin: 0;
+}
+
+.nav__link--btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-family: var(--font);
+    font-size: inherit;
+}
+
+.nav__link--accent {
+    background: var(--color-primary);
+    color: var(--color-white) !important;
+}
+
+.nav__link--accent:hover,
+.nav__link--accent.nav__link--active {
+    background: var(--color-primary-dark);
+    color: var(--color-white) !important;
+}
+
+.auth-card {
+    max-width: 440px;
+    margin: 0 auto;
+    background: var(--color-white);
+    padding: 32px;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+}
+
+.auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.auth-form__group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.auth-form__label {
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.auth-form__required {
+    color: var(--color-danger);
+}
+
+.auth-form__input {
+    padding: 10px 14px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-family: var(--font);
+    font-size: 0.95rem;
+    width: 100%;
+    transition: border-color 0.2s;
+}
+
+.auth-form__input:focus {
+    outline: none;
+    border-color: var(--color-primary);
+}
+
+.auth-form__group--error .auth-form__input {
+    border-color: var(--color-danger);
+}
+
+.auth-form__help {
+    font-size: 0.8rem;
+    color: var(--color-text-muted);
+}
+
+.auth-form__help ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.auth-form__error,
+.auth-form__errors {
+    color: var(--color-danger);
+    font-size: 0.85rem;
+}
+
+.auth-form__errors {
+    background: #fdecea;
+    padding: 12px;
+    border-radius: 8px;
+}
+
+.auth-card__footer {
+    text-align: center;
+    margin-top: 20px;
+    color: var(--color-text-muted);
+    font-size: 0.95rem;
+}
+
+.auth-card__footer a {
+    color: var(--color-primary);
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.auth-card__footer a:hover {
+    text-decoration: underline;
 }

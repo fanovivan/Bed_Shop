@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block title %}Вход{% endblock %}
+
+{% block content %}
+<section class="page-header">
+    <div class="container">
+        <h1 class="page-header__title">Вход</h1>
+        <p class="page-header__subtitle">Войдите в свой аккаунт</p>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        <div class="auth-card">
+            <form method="post" class="auth-form" novalidate>
+                {% csrf_token %}
+
+                {% if form.non_field_errors %}
+                    <div class="auth-form__errors">
+                        {% for error in form.non_field_errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+                <div class="auth-form__group{% if form.username.errors %} auth-form__group--error{% endif %}">
+                    <label for="{{ form.username.id_for_label }}" class="auth-form__label">
+                        Имя пользователя
+                    </label>
+                    {{ form.username }}
+                    {% for error in form.username.errors %}
+                        <p class="auth-form__error">{{ error }}</p>
+                    {% endfor %}
+                </div>
+
+                <div class="auth-form__group{% if form.password.errors %} auth-form__group--error{% endif %}">
+                    <label for="{{ form.password.id_for_label }}" class="auth-form__label">
+                        Пароль
+                    </label>
+                    {{ form.password }}
+                    {% for error in form.password.errors %}
+                        <p class="auth-form__error">{{ error }}</p>
+                    {% endfor %}
+                </div>
+
+                <button type="submit" class="btn btn--primary btn--full">Войти</button>
+            </form>
+
+            <p class="auth-card__footer">
+                Нет аккаунта?
+                <a href="{% url 'shop:register' %}">Зарегистрироваться</a>
+            </p>
+        </div>
+    </div>
+</section>
+{% endblock %}
