@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+
+{% block title %}Главная{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <div class="container hero__inner">
+        <div class="hero__content">
+            <h1 class="hero__title">Уют начинается с правильной мебели</h1>
+            <p class="hero__text">
+                Beds &amp; Sofas — магазин кроватей и диванов с собственным производством.
+                Мы создаём мебель, в которой хочется отдыхать каждый день.
+            </p>
+            <a href="{% url 'shop:catalog' %}" class="btn btn--primary">Смотреть каталог</a>
+        </div>
+        <div class="hero__image">
+            <div class="hero__placeholder">🛏️</div>
+        </div>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        <h2 class="section__title">О компании</h2>
+        <div class="about-grid">
+            <div class="about-card">
+                <div class="about-card__icon">🏭</div>
+                <h3>Собственное производство</h3>
+                <p>Контролируем качество на каждом этапе — от каркаса до обивки.</p>
+            </div>
+            <div class="about-card">
+                <div class="about-card__icon">🚚</div>
+                <h3>Доставка и сборка</h3>
+                <p>Бесплатная доставка по Москве и профессиональная сборка на месте.</p>
+            </div>
+            <div class="about-card">
+                <div class="about-card__icon">✅</div>
+                <h3>Гарантия 5 лет</h3>
+                <p>Уверены в своей мебели — даём расширенную гарантию на все изделия.</p>
+            </div>
+            <div class="about-card">
+                <div class="about-card__icon">🎨</div>
+                <h3>Индивидуальный заказ</h3>
+                <p>Выбирайте ткань, размер и конфигурацию под ваш интерьер.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% if featured_products %}
+<section class="section section--gray">
+    <div class="container">
+        <h2 class="section__title">Популярные модели</h2>
+        <div class="product-grid">
+            {% for product in featured_products %}
+            <article class="product-card">
+                <a href="{% url 'shop:catalog' %}?q={{ product.name|urlencode }}" class="product-card__image-link">
+                    {% if product.image %}
+                        <img src="{{ product.image.url }}" alt="{{ product.name }}" class="product-card__image">
+                    {% else %}
+                        <div class="product-card__placeholder">📦</div>
+                    {% endif %}
+                </a>
+                <div class="product-card__body">
+                    <span class="product-card__category">{{ product.category.name }}</span>
+                    <h3 class="product-card__name">{{ product.name }}</h3>
+                    <p class="product-card__price">{{ product.price }} ₽</p>
+                    <form method="post" action="{% url 'shop:cart_add' product.id %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="next" value="{% url 'shop:home' %}">
+                        <button type="submit" class="btn btn--secondary btn--full">В корзину</button>
+                    </form>
+                </div>
+            </article>
+            {% endfor %}
+        </div>
+        <div class="section__action">
+            <a href="{% url 'shop:catalog' %}" class="btn btn--outline">Весь каталог</a>
+        </div>
+    </div>
+</section>
+{% endif %}
+{% endblock %}

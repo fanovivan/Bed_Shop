@@ -1,0 +1,62 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Beds & Sofas{% endblock %} — Мебель для дома</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <header class="header">
+        <div class="container header__inner">
+            <a href="{% url 'shop:home' %}" class="logo">
+                <span class="logo__icon">🛋</span>
+                <span class="logo__text">Beds &amp; Sofas</span>
+            </a>
+            <nav class="nav">
+                <a href="{% url 'shop:home' %}" class="nav__link{% if request.resolver_match.url_name == 'home' %} nav__link--active{% endif %}">Главная</a>
+                <a href="{% url 'shop:catalog' %}" class="nav__link{% if request.resolver_match.url_name == 'catalog' %} nav__link--active{% endif %}">Каталог</a>
+                <a href="{% url 'shop:cart' %}" class="nav__link nav__link--cart{% if request.resolver_match.url_name == 'cart' %} nav__link--active{% endif %}">
+                    Корзина
+                    {% if cart_item_count %}
+                        <span class="cart-badge">{{ cart_item_count }}</span>
+                    {% endif %}
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    {% if messages %}
+    <div class="container messages">
+        {% for message in messages %}
+            <div class="message message--{{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="footer">
+        <div class="container footer__inner">
+            <div class="footer__brand">
+                <span class="logo__text">Beds &amp; Sofas</span>
+                <p>Качественная мебель для вашего дома с 2010 года</p>
+            </div>
+            <div class="footer__contacts">
+                <p>📞 +7 (495) 123-45-67</p>
+                <p>✉️ info@bedssofas.ru</p>
+                <p>📍 Москва, ул. Мебельная, 15</p>
+            </div>
+        </div>
+        <div class="footer__copy">
+            <div class="container">&copy; 2026 Beds &amp; Sofas. Все права защищены.</div>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+
+{% block title %}Каталог{% endblock %}
+
+{% block content %}
+<section class="page-header">
+    <div class="container">
+        <h1 class="page-header__title">Каталог мебели</h1>
+        <p class="page-header__subtitle">Кровати и диваны для любого интерьера</p>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container catalog-layout">
+        <aside class="filters">
+            <h2 class="filters__title">Фильтры</h2>
+            <form method="get" class="filters__form">
+                <div class="filters__group">
+                    <label class="filters__label" for="q">Поиск</label>
+                    <input type="text" id="q" name="q" value="{{ search_query }}" placeholder="Название..." class="filters__input">
+                </div>
+
+                <div class="filters__group">
+                    <label class="filters__label">Категория</label>
+                    <div class="filters__radio-group">
+                        <label class="filters__radio">
+                            <input type="radio" name="category" value="" {% if not current_category %}checked{% endif %}>
+                            Все
+                        </label>
+                        {% for category in categories %}
+                        <label class="filters__radio">
+                            <input type="radio" name="category" value="{{ category.slug }}" {% if current_category == category.slug %}checked{% endif %}>
+                            {{ category.name }}
+                        </label>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div class="filters__group">
+                    <label class="filters__label">Цена, ₽</label>
+                    <div class="filters__price-row">
+                        <input type="number" name="min_price" value="{{ min_price }}" placeholder="от" class="filters__input" min="0">
+                        <input type="number" name="max_price" value="{{ max_price }}" placeholder="до" class="filters__input" min="0">
+                    </div>
+                </div>
+
+                <div class="filters__group">
+                    <label class="filters__label" for="sort">Сортировка</label>
+                    <select id="sort" name="sort" class="filters__select">
+                        <option value="newest" {% if current_sort == 'newest' %}selected{% endif %}>Сначала новые</option>
+                        <option value="price_asc" {% if current_sort == 'price_asc' %}selected{% endif %}>Цена: по возрастанию</option>
+                        <option value="price_desc" {% if current_sort == 'price_desc' %}selected{% endif %}>Цена: по убыванию</option>
+                        <option value="name" {% if current_sort == 'name' %}selected{% endif %}>По названию</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="btn btn--primary btn--full">Применить</button>
+                <a href="{% url 'shop:catalog' %}" class="btn btn--outline btn--full">Сбросить</a>
+            </form>
+        </aside>
+
+        <div class="catalog-content">
+            <p class="catalog-count">Найдено: {{ products|length }} товар(ов)</p>
+
+            {% if products %}
+            <div class="product-grid">
+                {% for product in products %}
+                <article class="product-card">
+                    {% if product.image %}
+                        <img src="{{ product.image.url }}" alt="{{ product.name }}" class="product-card__image">
+                    {% else %}
+                        <div class="product-card__placeholder">📦</div>
+                    {% endif %}
+                    <div class="product-card__body">
+                        <span class="product-card__category">{{ product.category.name }}</span>
+                        <h3 class="product-card__name">{{ product.name }}</h3>
+                        <p class="product-card__desc">{{ product.description|truncatewords:15 }}</p>
+                        <p class="product-card__price">{{ product.price }} ₽</p>
+                        <form method="post" action="{% url 'shop:cart_add' product.id %}">
+                            {% csrf_token %}
+                            <input type="hidden" name="next" value="{% url 'shop:catalog' %}">
+                            <button type="submit" class="btn btn--secondary btn--full">В корзину</button>
+                        </form>
+                    </div>
+                </article>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="empty-state">
+                <p class="empty-state__icon">🔍</p>
+                <p class="empty-state__text">По вашему запросу ничего не найдено. Попробуйте изменить фильтры.</p>
+                <a href="{% url 'shop:catalog' %}" class="btn btn--outline">Сбросить фильтры</a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</section>
+{% endblock %}
